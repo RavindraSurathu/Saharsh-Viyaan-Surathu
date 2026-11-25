@@ -102,6 +102,7 @@
     var set = [frame(C.mainPhoto, T("st_main"), true)];
     C.photos.forEach(function (p) { set.push(frame(p.src, p[lang], false)); });
     set.forEach(function (n, i) {
+      if (i > 0 && C.photos[i - 1].wide) n.classList.add("wide");
       n.classList.add("rv"); n.style.setProperty("--d", ((i % 2) * 0.12) + "s"); n.tabIndex = 0; n.setAttribute("role", "button");
       n.addEventListener("click", function () { openLB(i); });
       n.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLB(i); } });

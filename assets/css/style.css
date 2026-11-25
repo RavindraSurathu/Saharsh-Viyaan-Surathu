@@ -338,3 +338,6 @@ body.lb-open{overflow:hidden}
 .lb-ph{width:min(70vw,360px);aspect-ratio:1;display:grid;place-items:center;align-content:center;font-size:72px;background:repeating-linear-gradient(45deg,#f1dcbb 0 12px,#f8e8cc 12px 24px);border-radius:8px;color:var(--cocoa)}
 .lb-ph small{font:16px var(--f-ui)}
 .lb-cap{color:var(--gold);font:600 20px var(--f-ui);margin:0}
+
+.gal .frame.wide{grid-column:1/-1;justify-self:center;width:min(88vw,460px)!important;margin-top:12px}
+.gal .frame.wide .img{aspect-ratio:4/3}

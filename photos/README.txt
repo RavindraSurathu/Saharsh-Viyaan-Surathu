@@ -7,6 +7,7 @@ Upload Saharsh's photos into this folder using exactly these names (JPG, ideally
   month-09.jpg       9 months
   month-12.jpg       12 months
   family.jpg         With Mom & Dad
+  brothers.jpg       Saharsh & elder brother Yokshith together (shown big at the very end)
 
 Missing photos simply show a teddy placeholder. To rename files or add more frames,
 edit assets/js/config.js.

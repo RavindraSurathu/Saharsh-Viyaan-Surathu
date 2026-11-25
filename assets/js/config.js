@@ -25,7 +25,8 @@ VC.CONFIG = {
     { src: "photos/month-06.jpg", en: "6 months",       te: "6 నెలలు" },
     { src: "photos/month-09.jpg", en: "9 months",       te: "9 నెలలు" },
     { src: "photos/month-12.jpg", en: "12 months",      te: "12 నెలలు" },
-    { src: "photos/family.jpg",   en: "With Mom & Dad", te: "అమ్మానాన్నలతో" }
+    { src: "photos/family.jpg",   en: "With Mom & Dad", te: "అమ్మానాన్నలతో" },
+    { src: "photos/brothers.jpg", en: "Big brother & little bear", te: "అన్నయ్య & తమ్ముడు", wide: true }
   ],
 
   /* Your brand. Leave logo "" to use the built-in VC monogram, or set e.g. "assets/img/logo.svg".
