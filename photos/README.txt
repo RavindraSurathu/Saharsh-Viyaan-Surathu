@@ -1,13 +1,12 @@
-Upload Saharsh's photos into this folder using exactly these names (JPG, ideally under 400 KB each):
+Photos used by the invitation (JPG/JPEG, ideally under 400 KB each).
+Names must match assets/js/config.js exactly (currently .jpeg):
 
-  saharsh-main.jpg   big portrait in the golden arch
-  month-01.jpg       Newborn
-  month-03.jpg       3 months
-  month-06.jpg       6 months
-  month-09.jpg       9 months
-  month-12.jpg       12 months
-  family.jpg         With Mom & Dad
-  brothers.jpg       Saharsh & elder brother Yokshith together (shown big at the very end)
+  month-12.jpeg    big portrait in the golden arch (main photo)
+  month-01.jpeg    Newborn
+  month-03.jpeg    3 months
+  month-06.jpeg    6 months
+  month-09.jpeg    9 months
+  family.jpeg      Our little family
+  brothers.jpeg    Saharsh & big brother Yokshith (last)
 
-Missing photos simply show a teddy placeholder. To rename files or add more frames,
-edit assets/js/config.js.
+To use a different main photo, upload it and change `mainPhoto` in assets/js/config.js.

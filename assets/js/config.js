@@ -18,15 +18,14 @@ VC.CONFIG = {
   whatsapp: "919542222213",                 // RSVP number: country code + number, no + or spaces
 
   /* Photos: upload these files into the photos/ folder (see photos/README.txt) */
-  mainPhoto: "photos/saharsh-main.jpg",
+  mainPhoto: "photos/month-12.jpeg",
   photos: [
-    { src: "photos/month-01.jpg", en: "Newborn",        te: "నవజాత శిశువు" },
-    { src: "photos/month-03.jpg", en: "3 months",       te: "3 నెలలు" },
-    { src: "photos/month-06.jpg", en: "6 months",       te: "6 నెలలు" },
-    { src: "photos/month-09.jpg", en: "9 months",       te: "9 నెలలు" },
-    { src: "photos/month-12.jpg", en: "12 months",      te: "12 నెలలు" },
-    { src: "photos/family.jpg",   en: "With Mom & Dad", te: "అమ్మానాన్నలతో" },
-    { src: "photos/brothers.jpg", en: "Big brother & little bear", te: "అన్నయ్య & తమ్ముడు", wide: true }
+    { src: "photos/month-01.jpeg", en: "Newborn",        te: "నవజాత శిశువు" },
+    { src: "photos/month-03.jpeg", en: "3 months",       te: "3 నెలలు" },
+    { src: "photos/month-06.jpeg", en: "6 months",       te: "6 నెలలు" },
+    { src: "photos/month-09.jpeg", en: "9 months",       te: "9 నెలలు" },
+    { src: "photos/family.jpeg",   en: "Our little family", te: "మా కుటుంబం" },
+    { src: "photos/brothers.jpeg", en: "Big brother & little bear", te: "అన్నయ్య & తమ్ముడు" }
   ],
 
   /* Your brand. Leave logo "" to use the built-in VC monogram, or set e.g. "assets/img/logo.svg".
