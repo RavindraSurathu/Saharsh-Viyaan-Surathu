@@ -98,24 +98,27 @@
   }
   function renderStory() {
     var st = $("#strip"); st.innerHTML = "";
-    st.appendChild(frame(C.mainPhoto, T("st_main"), true));
-    C.photos.forEach(function (p) { st.appendChild(frame(p.src, p[lang], false)); });
+    var set = [frame(C.mainPhoto, T("st_main"), true)];
+    C.photos.forEach(function (p) { set.push(frame(p.src, p[lang], false)); });
+    set.forEach(function (n) { st.appendChild(n); });
+    if (!calm) set.forEach(function (n) { var c = n.cloneNode(true); c.setAttribute("aria-hidden", "true"); st.appendChild(c); });
+    st.classList.toggle("auto", !calm);
+    // clones need the images too (cloneNode copies the loaded <img> only if it already loaded)
+    if (!calm) [].slice.call(st.children).slice(set.length).forEach(function (c, i) {
+      var src = i === 0 ? C.mainPhoto : C.photos[i - 1].src, im = new Image(); im.onload = function () { var box = $(".img", c); box.innerHTML = ""; box.appendChild(im); }; im.src = src;
+    });
   }
 
-  var pin = $("#story"), strip = $("#strip"), sbar = $("#sbar"), pinOn = false, pinDist = 0;
+  var strip = $("#strip");
   function measurePin() {
     if (typeof measureSecs === "function") measureSecs();
-    pin.classList.remove("pinned"); pin.style.height = "";
-    pinOn = !calm && strip.scrollWidth > innerWidth + 40;
-    if (!pinOn) { strip.style.transform = ""; return; }
-    pinDist = strip.scrollWidth - innerWidth; pin.classList.add("pinned");
-    pin.style.height = (pinDist + innerHeight) + "px"; updatePin();
+    if (calm) return;
+    var half = strip.scrollWidth / 2; strip.style.animationDuration = Math.max(20, half / 55).toFixed(1) + "s";
   }
-  function updatePin() {
-    if (!pinOn) return;
-    var r = pin.getBoundingClientRect(), p = Math.min(1, Math.max(0, -r.top / (pin.offsetHeight - innerHeight || 1)));
-    strip.style.transform = "translate3d(" + (-p * pinDist).toFixed(1) + "px,0,0)"; sbar.style.transform = "scaleX(" + p.toFixed(3) + ")";
-  }
+  function updatePin() {}
+  var storyBox = $(".pin-sticky");
+  ["pointerenter", "pointerdown"].forEach(function (ev) { storyBox.addEventListener(ev, function () { strip.style.animationPlayState = "paused"; }); });
+  ["pointerleave", "pointerup", "pointercancel"].forEach(function (ev) { storyBox.addEventListener(ev, function () { strip.style.animationPlayState = ""; }); });
 
   /* ---------- scroll loop ---------- */
   var secs = $$("[data-sec]"), dots = $("#dots"), par = $$("[data-sp]"), tick = false, lastPaw = 0, lastY = 0, pawSide = 1;

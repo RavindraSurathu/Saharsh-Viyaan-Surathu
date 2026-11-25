@@ -243,7 +243,7 @@ html[lang=te] .unit small{letter-spacing:0;text-transform:none;font-size:clamp(1
 .pin.pinned .pin-sticky{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
 .pin.pinned .pin-head{padding-bottom:clamp(8px,3vh,30px)}
 .pin.pinned .strip{will-change:transform}
-.pin:not(.pinned) .pin-sticky{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
 .frame{flex:none;position:relative;text-align:center}
 .frame.main{width:min(62vw,340px,calc(48vh*.8))}
 .frame.pol{width:min(62vw,300px,46vh);background:var(--milk);padding:12px 12px 10px;border-radius:6px;box-shadow:0 20px 40px rgba(0,0,0,.55);color:var(--cocoa)}
@@ -307,3 +307,12 @@ html[lang=te] .field label,html[lang=te] .field .lbl{letter-spacing:.02em;font-s
   .ch,.kicker,.turning{opacity:1}
   #gate .seal{animation:none}
 }
+
+/* ---------- photo story: slow auto-scroll, right to left ---------- */
+.pin{padding:60px 0 70px}
+.pin-sticky{overflow:hidden}
+.strip.auto{padding-left:0;padding-right:clamp(24px,5vw,64px);animation:storyMove 60s linear infinite;will-change:transform}
+@keyframes storyMove{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+.strip.auto{overflow:visible}
+.pin .pbar{display:none!important}
+.pin-sticky:has(.strip:not(.auto)){overflow-x:auto}
