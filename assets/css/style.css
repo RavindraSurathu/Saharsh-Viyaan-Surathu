@@ -316,3 +316,25 @@ html[lang=te] .field label,html[lang=te] .field .lbl{letter-spacing:.02em;font-s
 .strip.auto{overflow:visible}
 .pin .pbar{display:none!important}
 .pin-sticky:has(.strip:not(.auto)){overflow-x:auto}
+
+/* ---------- photo story: 2-up grid + lightbox (replaces auto-scroll) ---------- */
+.pin{padding:60px 0 40px}
+.pin-sticky{overflow:visible!important}
+#strip.gal{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 16px;width:100%;max-width:980px;margin:0 auto;padding:14px 16px 30px;animation:none!important;transform:none!important;overflow:visible}
+@media(min-width:900px){#strip.gal{grid-template-columns:repeat(3,minmax(0,1fr));gap:44px 30px}}
+.gal .frame{cursor:pointer;width:auto!important}
+.gal .frame.main{grid-column:1/-1;justify-self:center;width:min(78vw,340px)!important;margin-bottom:18px}
+.gal .frame.pol{padding:8px 8px 6px}
+.gal .frame.pol figcaption{font-size:16px;margin-top:8px}
+.gal .frame.pol:hover{translate:0 -4px}
+.gal .frame.pol::before{width:54px;height:20px;top:-10px}
+body.lb-open{overflow:hidden}
+#lb{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(14,6,3,.94);padding:56px 12px 24px}
+#lb.on{display:flex}
+#lb button{position:absolute;border:0;background:rgba(251,240,220,.14);color:var(--cream);width:48px;height:48px;border-radius:50%;font-size:26px;cursor:pointer;display:grid;place-items:center}
+.lb-x{top:max(14px,env(safe-area-inset-top));right:14px}.lb-p{left:10px;top:50%;translate:0 -50%}.lb-n{right:10px;top:50%;translate:0 -50%}
+.lb-img{max-width:min(92vw,720px);max-height:76vh;display:grid;place-items:center}
+.lb-img img{max-width:100%;max-height:76vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lb-ph{width:min(70vw,360px);aspect-ratio:1;display:grid;place-items:center;align-content:center;font-size:72px;background:repeating-linear-gradient(45deg,#f1dcbb 0 12px,#f8e8cc 12px 24px);border-radius:8px;color:var(--cocoa)}
+.lb-ph small{font:16px var(--f-ui)}
+.lb-cap{color:var(--gold);font:600 20px var(--f-ui);margin:0}

@@ -96,29 +96,44 @@
     if (!calm && !main) fig.style.rotate = (Math.random() * 6 - 3).toFixed(1) + "deg";
     return fig;
   }
+  var strip = $("#strip"), lbItems = [];
   function renderStory() {
-    var st = $("#strip"); st.innerHTML = "";
+    strip.innerHTML = ""; strip.classList.add("gal"); lbItems = [];
     var set = [frame(C.mainPhoto, T("st_main"), true)];
     C.photos.forEach(function (p) { set.push(frame(p.src, p[lang], false)); });
-    set.forEach(function (n) { st.appendChild(n); });
-    if (!calm) set.forEach(function (n) { var c = n.cloneNode(true); c.setAttribute("aria-hidden", "true"); st.appendChild(c); });
-    st.classList.toggle("auto", !calm);
-    // clones need the images too (cloneNode copies the loaded <img> only if it already loaded)
-    if (!calm) [].slice.call(st.children).slice(set.length).forEach(function (c, i) {
-      var src = i === 0 ? C.mainPhoto : C.photos[i - 1].src, im = new Image(); im.onload = function () { var box = $(".img", c); box.innerHTML = ""; box.appendChild(im); }; im.src = src;
+    set.forEach(function (n, i) {
+      n.classList.add("rv"); n.style.setProperty("--d", ((i % 2) * 0.12) + "s"); n.tabIndex = 0; n.setAttribute("role", "button");
+      n.addEventListener("click", function () { openLB(i); });
+      n.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLB(i); } });
+      strip.appendChild(n); if (typeof io !== "undefined" && io) io.observe(n);
     });
+    lbItems = set;
   }
-
-  var strip = $("#strip");
-  function measurePin() {
-    if (typeof measureSecs === "function") measureSecs();
-    if (calm) return;
-    var half = strip.scrollWidth / 2; strip.style.animationDuration = Math.max(20, half / 55).toFixed(1) + "s";
-  }
+  function measurePin() { if (typeof measureSecs === "function") measureSecs(); }
   function updatePin() {}
-  var storyBox = $(".pin-sticky");
-  ["pointerenter", "pointerdown"].forEach(function (ev) { storyBox.addEventListener(ev, function () { strip.style.animationPlayState = "paused"; }); });
-  ["pointerleave", "pointerup", "pointercancel"].forEach(function (ev) { storyBox.addEventListener(ev, function () { strip.style.animationPlayState = ""; }); });
+
+  /* lightbox */
+  var lb = null, lbI = 0;
+  function lbShow(i) {
+    lbI = (i + lbItems.length) % lbItems.length;
+    var fig = lbItems[lbI], im = $("img", fig), cap = $("figcaption", fig).textContent, box = $(".lb-img", lb);
+    box.innerHTML = im ? "" : "<div class=\"lb-ph\">🧸<small>" + T("st_add") + "</small></div>";
+    if (im) { var c = new Image(); c.src = im.src; c.alt = im.alt; box.appendChild(c); }
+    $(".lb-cap", lb).textContent = cap;
+  }
+  function openLB(i) {
+    if (!lb) {
+      lb = document.createElement("div"); lb.id = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-modal", "true");
+      lb.innerHTML = '<button class="lb-x" aria-label="Close">✕</button><button class="lb-p" aria-label="Previous">‹</button><div class="lb-img"></div><p class="lb-cap"></p><button class="lb-n" aria-label="Next">›</button>';
+      body.appendChild(lb);
+      lb.addEventListener("click", function (e) { var t = e.target; if (t.classList.contains("lb-p")) lbShow(lbI - 1); else if (t.classList.contains("lb-n")) lbShow(lbI + 1); else if (!t.closest(".lb-img img")) closeLB(); });
+      var sx = 0; lb.addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; }, { passive: true });
+      lb.addEventListener("touchend", function (e) { var d = e.changedTouches[0].clientX - sx; if (Math.abs(d) > 50) lbShow(lbI + (d < 0 ? 1 : -1)); }, { passive: true });
+      addEventListener("keydown", function (e) { if (!lb.classList.contains("on")) return; if (e.key === "Escape") closeLB(); else if (e.key === "ArrowRight") lbShow(lbI + 1); else if (e.key === "ArrowLeft") lbShow(lbI - 1); });
+    }
+    lbShow(i); lb.classList.add("on"); body.classList.add("lb-open"); VC.audio.sfx("pop");
+  }
+  function closeLB() { lb.classList.remove("on"); body.classList.remove("lb-open"); }
 
   /* ---------- scroll loop ---------- */
   var secs = $$("[data-sec]"), dots = $("#dots"), par = $$("[data-sp]"), tick = false, lastPaw = 0, lastY = 0, pawSide = 1;
