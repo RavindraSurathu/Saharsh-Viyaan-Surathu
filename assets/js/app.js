@@ -53,7 +53,7 @@
 
   /* ---------- sound ---------- */
   function soundUI() { var m = VC.audio.isMuted(), b = $("#snd"); b.textContent = m ? "🔇" : "🔊"; b.setAttribute("aria-pressed", String(!m)); b.setAttribute("aria-label", m ? T("a_off") : T("a_on")); }
-  $("#snd").addEventListener("click", function () { VC.audio.setMuted(!VC.audio.isMuted()); soundUI(); });
+  $("#snd").addEventListener("click", function () { VC.audio.setMuted(!VC.audio.isMuted()); if (!VC.audio.isMuted()) VC.audio.start(); soundUI(); });
 
   /* ---------- flip clock ---------- */
   var flips = $$("#flips .flip"), cur = [null, null, null, null], target = new Date(C.partyISO).getTime();
