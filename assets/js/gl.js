@@ -22,8 +22,8 @@
     " vec2 uv=gl_FragCoord.xy/uRes;float asp=uRes.x/uRes.y;",
     " vec2 p=(uv-.5)*vec2(asp,1.)*2.4;float t=uTime*.045;",
     " vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)-t));",
-    " vec2 r=vec2(fbm(p+3.*q+vec2(1.7,9.2)+t*1.3),fbm(p+3.*q+vec2(8.3,2.8)-t*1.1));",
-    " float f=fbm(p+3.*r+vec2(0.,uScroll*.0004));",
+    " float f=fbm(p+3.*q+vec2(0.,uScroll*.0004));",
+    " vec2 r=q;",
     " vec3 c0=vec3(.055,.027,.016),c1=vec3(.16,.08,.05),c2=vec3(.42,.24,.12),c3=vec3(.93,.76,.45);",
     " vec3 col=mix(c0,c1,smoothstep(.15,.7,f));",
     " col=mix(col,c2,smoothstep(.45,1.,f*length(q)*1.35)*.7);",
@@ -55,7 +55,7 @@
   var loc = gl.getAttribLocation(prog, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
   var U = {}; ["uRes", "uTime", "uMouse", "uScroll", "uBoost"].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
 
-  var scale = small ? 0.45 : 0.6, W = 0, H = 0;
+  var scale = small ? 0.3 : 0.38, W = 0, H = 0;
   function resize() {
     W = Math.max(2, Math.ceil(innerWidth * scale)); H = Math.max(2, Math.ceil(innerHeight * scale));
     cv.width = W; cv.height = H; gl.viewport(0, 0, W, H); draw(performance.now());
@@ -75,7 +75,7 @@
   function loop(now) {
     requestAnimationFrame(loop);
     if (paused || calm) return;
-    frame++; if (small && (frame & 1)) return;      // 30fps on phones
+    if (now - last < 33) return; last = now;      // cap at ~30fps
     draw(now);
   }
   document.addEventListener("visibilitychange", function () { paused = document.hidden; });

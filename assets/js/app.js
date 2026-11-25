@@ -104,6 +104,7 @@
 
   var pin = $("#story"), strip = $("#strip"), sbar = $("#sbar"), pinOn = false, pinDist = 0;
   function measurePin() {
+    if (typeof measureSecs === "function") measureSecs();
     pin.classList.remove("pinned"); pin.style.height = "";
     pinOn = !calm && strip.scrollWidth > innerWidth + 40;
     if (!pinOn) { strip.style.transform = ""; return; }
@@ -119,7 +120,8 @@
   /* ---------- scroll loop ---------- */
   var secs = $$("[data-sec]"), dots = $("#dots"), par = $$("[data-sp]"), tick = false, lastPaw = 0, lastY = 0, pawSide = 1;
   secs.forEach(function (s) { var a = document.createElement("a"); a.href = "#" + s.id; a.dataset.l = s.dataset.l; a.setAttribute("aria-label", s.dataset.l); dots.appendChild(a); });
-  var dotA = $$("a", dots);
+  var dotA = $$("a", dots), secTop = [], lastAct = -1;
+  function measureSecs() { secTop = secs.map(function (s) { return s.getBoundingClientRect().top + scrollY; }); }
   function paw(x, y, ang) {
     var s = document.createElementNS("http://www.w3.org/2000/svg", "svg"); s.setAttribute("class", "trail"); s.setAttribute("viewBox", "-16 -20 32 38");
     s.innerHTML = '<use href="#paw"/>'; s.style.left = x + "px"; s.style.top = y + "px"; s.style.rotate = ang + "deg";
@@ -129,10 +131,13 @@
     var y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
     $("#pbar").style.transform = "scaleX(" + (h > 0 ? y / h : 0).toFixed(4) + ")";
     if (VC.gl) VC.gl.setScroll(y);
-    if (!calm) par.forEach(function (e) { var r = e.getBoundingClientRect(); e.style.translate = "0 " + ((r.top + r.height / 2 - innerHeight / 2) * -parseFloat(e.dataset.sp)).toFixed(1) + "px"; });
-    var mid = innerHeight * .45, act = 0;
-    secs.forEach(function (s, i) { var r = s.getBoundingClientRect(); if (r.top <= mid) act = i; });
-    dotA.forEach(function (d, i) { d.classList.toggle("on", i === act); });
+    if (!calm) {
+      var rs = par.map(function (e) { return e.getBoundingClientRect(); });
+      par.forEach(function (e, i) { var r = rs[i]; if (r.bottom < -200 || r.top > innerHeight + 200) return; e.style.translate = "0 " + ((r.top + r.height / 2 - innerHeight / 2) * -parseFloat(e.dataset.sp)).toFixed(1) + "px"; });
+    }
+    var act = 0, mid = innerHeight * .45;
+    for (var i = 0; i < secTop.length; i++) if (secTop[i] - y <= mid) act = i;
+    if (act !== lastAct) { lastAct = act; dotA.forEach(function (d, i) { d.classList.toggle("on", i === act); }); }
     updatePin();
     if (!calm && body.classList.contains("on") && Math.abs(y - lastY) > 70 && performance.now() - lastPaw > 260) {
       lastPaw = performance.now(); lastY = y; pawSide = -pawSide; paw(innerWidth * (.5 + pawSide * .12) + (Math.random() * 40 - 20), innerHeight * .78, pawSide * 12);
@@ -140,7 +145,7 @@
     tick = false;
   }
   addEventListener("scroll", function () { if (!tick) { tick = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  var rz; addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { measurePin(); onScroll(); }, 150); });
+  var rz; addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { measurePin(); measureSecs(); onScroll(); }, 150); });
 
   /* ---------- reveals ---------- */
   var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .18, rootMargin: "0px 0px -6% 0px" });
