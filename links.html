@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Guest link maker · Vivaah Creations</title>
+<style>
+body{margin:0;background:#1d0e08;color:#fbf0dc;font:17px/1.5 system-ui,sans-serif;padding:24px}
+main{max-width:720px;margin:0 auto}h1{color:#e8c27a;font-family:Georgia,serif}
+textarea,select,input{width:100%;box-sizing:border-box;background:#fbf0dc;color:#2a150d;border:0;border-radius:10px;padding:12px;font:inherit;margin:6px 0 16px}
+button{background:#e8c27a;color:#2a150d;border:0;border-radius:30px;padding:12px 22px;font:600 16px system-ui;cursor:pointer;margin:0 8px 8px 0}
+.row{display:flex;gap:10px;align-items:center;background:#34190f;border-radius:12px;padding:10px 14px;margin:8px 0}
+.row span{flex:1;word-break:break-all;font-size:14px}.row b{display:block;font-size:16px}
+small{opacity:.7}
+</style></head><body><main>
+<h1>Personalised guest links</h1>
+<p>Type one guest name per line. Each guest gets a link that greets them by name (“Dear Ravi Garu,”) and pre-fills their RSVP.</p>
+<label>Invitation address<input id="base" value="https://vivaahcreations.com/Saharsh-Viyaan-Surathu/"></label>
+<label>Language<select id="lang"><option value="">English</option><option value="te">Telugu</option></select></label>
+<label>Guest names<textarea id="names" rows="7" placeholder="Ravi Garu&#10;Lakshmi Aunty&#10;Kiran & Family"></textarea></label>
+<button id="go">Create links</button><button id="copy">Copy all</button><button id="wa">Share all (text)</button>
+<div id="out"></div><small>Everything happens in your browser; nothing is uploaded.</small>
+<script>
+var out=document.getElementById("out"),L=[];
+function make(){L=[];out.innerHTML="";var b=base.value.replace(/\?.*$/,""),lg=lang.value;
+names.value.split("\n").map(function(s){return s.trim()}).filter(Boolean).forEach(function(n){
+var u=b+"?to="+encodeURIComponent(n)+(lg?"&lang="+lg:"");L.push(n+": "+u);
+var d=document.createElement("div");d.className="row";d.innerHTML="<span><b></b><i></i></span>";d.querySelector("b").textContent=n;d.querySelector("i").textContent=u;
+var c=document.createElement("button");c.textContent="Copy";c.onclick=function(){navigator.clipboard.writeText(u)};
+var w=document.createElement("a");w.textContent="WhatsApp";w.target="_blank";w.style.cssText="color:#e8c27a";
+w.href="https://wa.me/?text="+encodeURIComponent("Dear "+n+", you are warmly invited to Saharsh Viyaan's 1st birthday 🧸🎂\n"+u);
+d.appendChild(c);d.appendChild(w);out.appendChild(d)})}
+go.onclick=make;
+copy.onclick=function(){make();navigator.clipboard.writeText(L.join("\n"))};
+wa.onclick=function(){make();location.href="https://wa.me/?text="+encodeURIComponent(L.join("\n"))};
+</script></main></body></html>
